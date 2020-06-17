@@ -232,6 +232,16 @@
 
 /* TODO H3 DAP (Digital Audio Processing) bits */
 
+/* CODEC DAC AND FIFO moved on R40 */
+#define SUN8I_R40_CODEC_DAC_TXCNT		(0x40)
+#define SUN8I_R40_CODEC_ADC_RXCNT		(0x44)
+#define SUN8I_R40_CODEC_ADC_RXDATA		(0x18)
+#define SUN8I_R40_CODEC_DAC_TXDATA		(0x20)
+#define SUN8I_R40_CODEC_DAC_DBG			(0x48)
+#define SUN8I_R40_CODEC_ADC_DBG			(0x4c)
+#define SUN8I_R40_CODEC_ADC_FIFOC		(0x04)
+#define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
+
 struct sun4i_codec {
 	struct device	*dev;
 	struct regmap	*regmap;
@@ -1241,13 +1251,41 @@ static const struct snd_soc_dapm_widget sun8i_a23_codec_codec_widgets[] = {
 };
 
 static const struct snd_soc_component_driver sun8i_a23_codec_codec = {
-	.controls		= sun8i_a23_codec_codec_controls,
-	.num_controls		= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
-	.dapm_widgets		= sun8i_a23_codec_codec_widgets,
-	.num_dapm_widgets	= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
-	.idle_bias_on		= 1,
-	.use_pmdown_time	= 1,
-	.endianness		= 1,
+	.controls				= sun8i_a23_codec_codec_controls,
+	.num_controls			= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
+	.dapm_widgets			= sun8i_a23_codec_codec_widgets,
+	.num_dapm_widgets		= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
+	.idle_bias_on			= 1,
+	.use_pmdown_time		= 1,
+	.endianness				= 1,
+	.non_legacy_dai_naming	= 1,
+};
+
+/* sun8i R40 codec */
+static const struct snd_kcontrol_new sun8i_r40_codec_codec_controls[] = {
+	SOC_SINGLE_TLV("DAC Playback Volume", SUN4I_CODEC_DAC_DPC,
+		       SUN4I_CODEC_DAC_DPC_DVOL, 0x3f, 1,
+		       sun6i_codec_dvol_scale),
+};
+
+static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
+	/* Digital parts of the ADCs */
+	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN8I_R40_CODEC_ADC_FIFOC,
+			    SUN6I_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
+	/* Digital parts of the DACs */
+	SND_SOC_DAPM_SUPPLY("DAC Enable", SUN4I_CODEC_DAC_DPC,
+			    SUN4I_CODEC_DAC_DPC_EN_DA, 0, NULL, 0),
+
+};
+
+static const struct snd_soc_component_driver sun8i_r40_codec_codec = {
+	.controls				= sun8i_r40_codec_codec_controls,
+	.num_controls			= ARRAY_SIZE(sun8i_r40_codec_codec_controls),
+	.dapm_widgets			= sun8i_r40_codec_codec_widgets,
+	.num_dapm_widgets		= ARRAY_SIZE(sun8i_r40_codec_codec_widgets),
+	.idle_bias_on			= 1,
+	.use_pmdown_time		= 1,
+	.endianness				= 1,
 	.non_legacy_dai_naming	= 1,
 };
 
@@ -1524,15 +1562,15 @@ static struct snd_soc_card *sun8i_r40_codec_create_card(struct device *dev)
 	if (!card->dai_link)
 		return ERR_PTR(-ENOMEM);
 
-	card->dev		= dev;
-	card->name		= "R40 Audio Codec";
-	card->dapm_widgets	= sun6i_codec_card_dapm_widgets;
+	card->dev				= dev;
+	card->name				= "R40 Audio Codec";
+	card->dapm_widgets		= sun6i_codec_card_dapm_widgets;
 	card->num_dapm_widgets	= ARRAY_SIZE(sun6i_codec_card_dapm_widgets);
-	card->dapm_routes	= sun8i_codec_card_routes;
+	card->dapm_routes		= sun8i_codec_card_routes;
 	card->num_dapm_routes	= ARRAY_SIZE(sun8i_codec_card_routes);
-	card->aux_dev		= &aux_dev;
-	card->num_aux_devs	= 1;
-	card->fully_routed	= true;
+	card->aux_dev			= &aux_dev;
+	card->num_aux_devs		= 1;
+	card->fully_routed		= true;
 
 	ret = snd_soc_of_parse_audio_routing(card, "allwinner,audio-routing");
 	if (ret)
@@ -1618,7 +1656,7 @@ static const struct regmap_config sun8i_r40_codec_regmap_config = {
 	.reg_bits	= 32,
 	.reg_stride	= 4,
 	.val_bits	= 32,
-	.max_register	= SUN8I_H3_CODEC_ADC_DBG,
+	.max_register	= SUN8I_R40_CODEC_ADC_DBG,
 };
 
 static const struct regmap_config sun8i_v3s_codec_regmap_config = {
@@ -1697,12 +1735,12 @@ static const struct sun4i_codec_quirks sun8i_r40_codec_quirks = {
 	 * TODO The codec structure should be split out, like
 	 * H3, when adding digital audio processing support.
 	 */
-	.codec		= &sun8i_a23_codec_codec,
+	.codec			= &sun8i_r40_codec_codec,
 	.create_card	= sun8i_r40_codec_create_card,
-	.reg_adc_fifoc	= REG_FIELD(SUN6I_CODEC_ADC_FIFOC, 0, 31),
-	.reg_dac_txdata	= SUN8I_H3_CODEC_DAC_TXDATA,
-	.reg_adc_rxdata	= SUN6I_CODEC_ADC_RXDATA,
-	.has_reset	= true,
+	.reg_adc_fifoc	= REG_FIELD(SUN8I_R40_CODEC_ADC_FIFOC, 0, 31),
+	.reg_dac_txdata	= SUN8I_R40_CODEC_DAC_TXDATA,
+	.reg_adc_rxdata	= SUN8I_R40_CODEC_ADC_RXDATA,
+	.has_reset		= true,
 };
 
 static const struct sun4i_codec_quirks sun8i_v3s_codec_quirks = {
