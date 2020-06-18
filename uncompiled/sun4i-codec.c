@@ -237,8 +237,6 @@
 #define SUN8I_R40_CODEC_ADC_RXCNT		(0x44)
 #define SUN8I_R40_CODEC_ADC_RXDATA		(0x18)
 #define SUN8I_R40_CODEC_DAC_TXDATA		(0x20)
-#define SUN8I_R40_CODEC_DAC_DBG			(0x48)
-#define SUN8I_R40_CODEC_ADC_DBG			(0x4c)
 #define SUN8I_R40_CODEC_ADC_FIFOC		(0x04)
 #define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
 
@@ -1656,7 +1654,7 @@ static const struct regmap_config sun8i_r40_codec_regmap_config = {
 	.reg_bits	= 32,
 	.reg_stride	= 4,
 	.val_bits	= 32,
-	.max_register	= SUN8I_R40_CODEC_ADC_DBG,
+	.max_register	= SUN8I_H3_CODEC_ADC_DBG,
 };
 
 static const struct regmap_config sun8i_v3s_codec_regmap_config = {
