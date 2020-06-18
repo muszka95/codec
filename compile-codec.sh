@@ -12,6 +12,7 @@ make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
 wait
 ###Copy modules.
 sudo cp sun4i-codec.ko /lib/modules/$(uname -r)/kernel/sound/soc/sunxi
+sudo cp sun8i-codec-analog.ko /lib/modules/$(uname -r)/kernel/sound/soc/sunxi
 
 ###sudo modprobe sun4i-codec
 ###aplay -l
