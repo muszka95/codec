@@ -1275,10 +1275,10 @@ static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 };
 
 static const struct snd_soc_component_driver sun8i_r40_codec_codec = {
-	.controls				= sun8i_r40_codec_codec_controls,
-	.num_controls			= ARRAY_SIZE(sun8i_r40_codec_codec_controls),
-	.dapm_widgets			= sun8i_r40_codec_codec_widgets,
-	.num_dapm_widgets		= ARRAY_SIZE(sun8i_r40_codec_codec_widgets),
+	.controls				= sun8i_a23_codec_codec_controls,
+	.num_controls			= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
+	.dapm_widgets			= sun8i_a23_codec_codec_widgets,
+	.num_dapm_widgets		= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
 	.idle_bias_on			= 1,
 	.use_pmdown_time		= 1,
 	.endianness				= 1,
@@ -1546,20 +1546,20 @@ static struct snd_soc_card *sun8i_r40_codec_create_card(struct device *dev)
 	if (!card)
 		return ERR_PTR(-ENOMEM);
 
-	aux_dev.dlc.of_node = of_parse_phandle(dev->of_node,
+	aux_dev.codec_of_node = of_parse_phandle(dev->of_node,
 						 "allwinner,codec-analog-controls",
 						 0);
-	if (!aux_dev.dlc.of_node) {
+	if (!aux_dev.codec_of_node) {
 		dev_err(dev, "Can't find analog controls for codec.\n");
 		return ERR_PTR(-EINVAL);
-	}
+	};
 
 	card->dai_link = sun4i_codec_create_link(dev, &card->num_links);
 	if (!card->dai_link)
 		return ERR_PTR(-ENOMEM);
 
 	card->dev				= dev;
-	card->name				= "R40 Audio Codec";
+	card->name				= "R40/V40 Audio Codec";
 	card->dapm_widgets		= sun6i_codec_card_dapm_widgets;
 	card->num_dapm_widgets	= ARRAY_SIZE(sun6i_codec_card_dapm_widgets);
 	card->dapm_routes		= sun8i_codec_card_routes;
@@ -1573,7 +1573,7 @@ static struct snd_soc_card *sun8i_r40_codec_create_card(struct device *dev)
 		dev_warn(dev, "failed to parse audio-routing: %d\n", ret);
 
 	return card;
-}
+};
 
 static struct snd_soc_card *sun8i_v3s_codec_create_card(struct device *dev)
 {
