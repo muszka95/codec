@@ -237,7 +237,8 @@
 #define SUN8I_R40_CODEC_ADC_RXCNT		(0x44)
 #define SUN8I_R40_CODEC_ADC_RXDATA		(0x18)
 #define SUN8I_R40_CODEC_DAC_TXDATA		(0x20)
-#define SUN8I_R40_CODEC_ADC_FIFOC		(0x04)
+#define SUN8I_R40_CODEC_ADC_FIFOC		(0x10)
+#define SUN8I_R40_CODEC_ADC_FIFOC_EN_AD	(7)
 #define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
 
 struct sun4i_codec {
@@ -1269,7 +1270,7 @@ static const struct snd_kcontrol_new sun8i_r40_codec_codec_controls[] = {
 static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 	/* Digital parts of the ADCs */
 	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN8I_R40_CODEC_ADC_FIFOC,
-			    SUN6I_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
+			    SUN8I_R40_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
 	/* Digital parts of the DACs */
 	SND_SOC_DAPM_SUPPLY("DAC Enable", SUN4I_CODEC_DAC_DPC,
 			    SUN4I_CODEC_DAC_DPC_EN_DA, 0, NULL, 0),
