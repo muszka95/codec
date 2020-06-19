@@ -1258,16 +1258,11 @@ static const struct snd_soc_component_driver sun8i_a23_codec_codec = {
 };
 
 /* sun8i R40 codec */
-static const struct snd_kcontrol_new sun8i_r40_codec_codec_controls[] = {
-	SOC_SINGLE_TLV("DAC Playback Volume", SUN4I_CODEC_DAC_DPC,
-		       SUN4I_CODEC_DAC_DPC_DVOL, 0x3f, 1,
-		       sun6i_codec_dvol_scale),
-};
 
 static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 	/* Digital parts of the ADCs */
 	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN6I_CODEC_ADC_FIFOC,
-			    SUN8I_R40_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
+			    SUN6I_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
 	/* Digital parts of the DACs */
 	SND_SOC_DAPM_SUPPLY("DAC Enable", SUN4I_CODEC_DAC_DPC,
 			    SUN4I_CODEC_DAC_DPC_EN_DA, 0, NULL, 0),
@@ -1277,8 +1272,8 @@ static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 static const struct snd_soc_component_driver sun8i_r40_codec_codec = {
 	.controls				= sun8i_a23_codec_codec_controls,
 	.num_controls			= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
-	.dapm_widgets			= sun8i_a23_codec_codec_widgets,
-	.num_dapm_widgets		= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
+	.dapm_widgets			= sun8i_r40_codec_codec_widgets,
+	.num_dapm_widgets		= ARRAY_SIZE(sun8i_r40_codec_codec_widgets),
 	.idle_bias_on			= 1,
 	.use_pmdown_time		= 1,
 	.endianness				= 1,
@@ -1546,10 +1541,10 @@ static struct snd_soc_card *sun8i_r40_codec_create_card(struct device *dev)
 	if (!card)
 		return ERR_PTR(-ENOMEM);
 
-	aux_dev.codec_of_node = of_parse_phandle(dev->of_node,
+	aux_dev.dlc.of_node = of_parse_phandle(dev->of_node,
 						 "allwinner,codec-analog-controls",
 						 0);
-	if (!aux_dev.codec_of_node) {
+	if (!aux_dev.dlc.of_node) {
 		dev_err(dev, "Can't find analog controls for codec.\n");
 		return ERR_PTR(-EINVAL);
 	};
