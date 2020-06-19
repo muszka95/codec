@@ -688,6 +688,7 @@ static const struct sun8i_codec_analog_quirks sun8i_h3_quirks = {
 
 static const struct sun8i_codec_analog_quirks sun8i_r40_quirks = {
 	.has_headphone	= true,
+	.has_hmic		= true,
 	.has_linein		= true,
 	.has_mbias		= true,
 	.has_mic2		= true,
