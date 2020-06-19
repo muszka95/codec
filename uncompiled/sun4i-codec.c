@@ -235,9 +235,6 @@
 /* CODEC DAC AND FIFO moved on R40 */
 #define SUN8I_R40_CODEC_DAC_TXCNT		(0x40)
 #define SUN8I_R40_CODEC_ADC_RXCNT		(0x44)
-#define SUN8I_R40_CODEC_ADC_RXDATA		(0x18)
-#define SUN8I_R40_CODEC_DAC_TXDATA		(0x20)
-#define SUN8I_R40_CODEC_ADC_FIFOC		(0x10)
 #define SUN8I_R40_CODEC_ADC_FIFOC_EN_AD	(7)
 #define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
 
@@ -1269,7 +1266,7 @@ static const struct snd_kcontrol_new sun8i_r40_codec_codec_controls[] = {
 
 static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 	/* Digital parts of the ADCs */
-	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN8I_R40_CODEC_ADC_FIFOC,
+	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN6I_CODEC_ADC_FIFOC,
 			    SUN8I_R40_CODEC_ADC_FIFOC_EN_AD, 0, NULL, 0),
 	/* Digital parts of the DACs */
 	SND_SOC_DAPM_SUPPLY("DAC Enable", SUN4I_CODEC_DAC_DPC,
@@ -1652,9 +1649,9 @@ static const struct regmap_config sun8i_h3_codec_regmap_config = {
 };
 
 static const struct regmap_config sun8i_r40_codec_regmap_config = {
-	.reg_bits	= 32,
-	.reg_stride	= 4,
-	.val_bits	= 32,
+	.reg_bits		= 32,
+	.reg_stride		= 4,
+	.val_bits		= 32,
 	.max_register	= SUN8I_H3_CODEC_ADC_DBG,
 };
 
@@ -1736,9 +1733,9 @@ static const struct sun4i_codec_quirks sun8i_r40_codec_quirks = {
 	 */
 	.codec			= &sun8i_r40_codec_codec,
 	.create_card	= sun8i_r40_codec_create_card,
-	.reg_adc_fifoc	= REG_FIELD(SUN8I_R40_CODEC_ADC_FIFOC, 0, 31),
-	.reg_dac_txdata	= SUN8I_R40_CODEC_DAC_TXDATA,
-	.reg_adc_rxdata	= SUN8I_R40_CODEC_ADC_RXDATA,
+	.reg_adc_fifoc	= REG_FIELD(SUN6I_CODEC_ADC_FIFOC, 0, 31),
+	.reg_dac_txdata	= SUN8I_H3_CODEC_DAC_TXDATA,
+	.reg_adc_rxdata	= SUN6I_CODEC_ADC_RXDATA,
 	.has_reset		= true,
 };
 
