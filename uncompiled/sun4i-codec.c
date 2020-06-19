@@ -233,8 +233,6 @@
 /* TODO H3 DAP (Digital Audio Processing) bits */
 
 /* CODEC DAC AND FIFO moved on R40 */
-#define SUN8I_R40_CODEC_DAC_TXCNT		(0x40)
-#define SUN8I_R40_CODEC_ADC_RXCNT		(0x44)
 #define SUN8I_R40_CODEC_ADC_FIFOC_EN_AD	(7)
 #define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
 
@@ -1247,18 +1245,17 @@ static const struct snd_soc_dapm_widget sun8i_a23_codec_codec_widgets[] = {
 };
 
 static const struct snd_soc_component_driver sun8i_a23_codec_codec = {
-	.controls				= sun8i_a23_codec_codec_controls,
-	.num_controls			= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
-	.dapm_widgets			= sun8i_a23_codec_codec_widgets,
-	.num_dapm_widgets		= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
-	.idle_bias_on			= 1,
-	.use_pmdown_time		= 1,
-	.endianness				= 1,
+	.controls		= sun8i_a23_codec_codec_controls,
+	.num_controls		= ARRAY_SIZE(sun8i_a23_codec_codec_controls),
+	.dapm_widgets		= sun8i_a23_codec_codec_widgets,
+	.num_dapm_widgets	= ARRAY_SIZE(sun8i_a23_codec_codec_widgets),
+	.idle_bias_on		= 1,
+	.use_pmdown_time	= 1,
+	.endianness		= 1,
 	.non_legacy_dai_naming	= 1,
 };
 
-/* sun8i R40 codec */
-
+/* sun8i R40/V40 codec */
 static const struct snd_soc_dapm_widget sun8i_r40_codec_codec_widgets[] = {
 	/* Digital parts of the ADCs */
 	SND_SOC_DAPM_SUPPLY("ADC Enable", SUN6I_CODEC_ADC_FIFOC,
