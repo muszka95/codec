@@ -108,19 +108,27 @@
 #define SUN8I_I2S_INT_STA_REG		0x0c
 #define SUN8I_I2S_FIFO_TX_REG		0x20
 
+/* For reference on R40 */
+#define SUN8I_I2S_CLK_DIV_REG		0x24
+#define SUN8I_I2S_CLK_DIV_MCLK_EN		BIT(8)
+#define SUN8I_I2S_CLK_DIV_BCLK_MASK		GENMASK(7, 4)
+#define SUN8I_I2S_CLK_DIV_BCLK(bclk)			((bclk) << 4)
+#define SUN8I_I2S_CLK_DIV_MCLK_MASK		GENMASK(3, 0)
+#define SUN8I_I2S_CLK_DIV_MCLK(mclk)			((mclk) << 0)
+
 #define SUN8I_I2S_CHAN_CFG_REG		0x30
 #define SUN8I_I2S_CHAN_CFG_RX_SLOT_NUM_MASK	GENMASK(6, 4)
 #define SUN8I_I2S_CHAN_CFG_RX_SLOT_NUM(chan)	((chan - 1) << 4)
 #define SUN8I_I2S_CHAN_CFG_TX_SLOT_NUM_MASK	GENMASK(2, 0)
 #define SUN8I_I2S_CHAN_CFG_TX_SLOT_NUM(chan)	(chan - 1)
 
-#define SUN8I_I2S_TX_CHAN_MAP_REG	0x44
 #define SUN8I_I2S_TX_CHAN_SEL_REG	0x34
 #define SUN8I_I2S_TX_CHAN_OFFSET_MASK		GENMASK(13, 12)
 #define SUN8I_I2S_TX_CHAN_OFFSET(offset)	(offset << 12)
 #define SUN8I_I2S_TX_CHAN_EN_MASK		GENMASK(11, 4)
 #define SUN8I_I2S_TX_CHAN_EN(num_chan)		(((1 << num_chan) - 1) << 4)
 
+#define SUN8I_I2S_TX_CHAN_MAP_REG	0x44
 #define SUN8I_I2S_RX_CHAN_SEL_REG	0x54
 #define SUN8I_I2S_RX_CHAN_MAP_REG	0x58
 
