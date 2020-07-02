@@ -232,9 +232,6 @@
 
 /* TODO H3 DAP (Digital Audio Processing) bits */
 
-/* FIFO moved on R40 */
-#define SUN8I_R40_CODEC_ADC_FIFOS		(0x08)
-
 struct sun4i_codec {
 	struct device	*dev;
 	struct regmap	*regmap;
